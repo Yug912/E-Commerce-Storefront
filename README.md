@@ -1,44 +1,50 @@
-# MERN-E-Commerce-Frontend
+# ShopIt — E-Commerce Storefront
 
-MERN-E-Commerce-Frontend is the frontend of an e-commerce web application built with ReactJS ,Material UI, ContextAPI, React-router-dom
-
+A full-featured e-commerce storefront developed by **Yug Thakral** as a MERN-stack project submission. ShopIt provides a customer shopping experience alongside an admin dashboard for managing the store.
 
 ## Features
 
-- User authentication and authorization(JWT)
-- Admin dashboard for managing products, orders, users and to show statistics
-- Payemnt Gateway
-- Mail Service
-- Forgot Password & Reset Password
-- Product listing and search
-- Product details and reviews
-- Cart management
-- Order history
+- JWT-based user authentication and authorization
+- Product browsing, search, categories, details, and reviews
+- Shopping cart and wishlist management
+- Order history and checkout flow with Razorpay integration
+- Password reset and email-service support
+- Admin dashboard for products, users, orders, and store statistics
 
 ## Tech Stack
-- MongoDB
-- ReactJS
-- NodeJS
-- ExpressJS
-## Images
 
-![Dashboard](https://res.cloudinary.com/dxguqzge7/image/upload/v1682853694/Stat1_asehhd.png)
-![Dashboard](https://res.cloudinary.com/dxguqzge7/image/upload/v1682853694/Stat2_tw25cm.png)
-![Dashboard](https://res.cloudinary.com/dxguqzge7/image/upload/v1682956688/Stat3_rslfzi.png)
-![Orders](https://res.cloudinary.com/dxguqzge7/image/upload/v1682956689/Orders_cyfzkp.png)
-![Users](https://res.cloudinary.com/dxguqzge7/image/upload/v1682956689/Users_nxx1cs.png)
-![HomePage](https://res.cloudinary.com/dxguqzge7/image/upload/v1682853694/Home_bcr44v.png)
-![Products](https://res.cloudinary.com/dxguqzge7/image/upload/v1682853695/Products_vxf8pr.png)
-![Product](https://res.cloudinary.com/dxguqzge7/image/upload/v1682853694/Product_tnba6w.png)
-![Payment](https://res.cloudinary.com/dxguqzge7/image/upload/v1682853693/Payment_xrucd9.png)
-![Cart](https://res.cloudinary.com/dxguqzge7/image/upload/v1682853693/Cart_zpzmwr.png)
-![UserProfile](https://res.cloudinary.com/dxguqzge7/image/upload/v1682853694/User_lyfday.png)
+- Frontend: React, React Router, Material UI, Context API
+- Backend: Node.js, Express, MongoDB
+- Payments: Razorpay
 
-## Backend
+## Run Locally
 
-The backend of the application is built with NodeJS and ExpressJS and uses a MongoDB database to store the product and user data. The source code for the backend can be found at [https://github.com/Saurabh-8585/MERN-E-Commerce-Backend](https://github.com/Saurabh-8585/MERN-E-Commerce-Backend).
+1. Install dependencies:
 
+   ```bash
+   npm install
+   ```
 
-## License
+2. Start the development server:
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+   ```bash
+   npm start
+   ```
+
+3. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Available Scripts
+
+- `npm start` — runs the app in development mode
+- `npm test` — launches the test runner
+- `npm run build` — creates an optimized production build
+
+## Project Author
+
+**Yug Thakral**
+GitHub: [Yug912](https://github.com/Yug912)
+
+## Project Resources
+
+- Frontend repository: [E-Commerce-Storefront](https://github.com/Yug912/E-Commerce-Storefront)
+- Backend API repository: [MERN-E-Commerce-Backend](https://github.com/Saurabh-8585/MERN-E-Commerce-Backend)
