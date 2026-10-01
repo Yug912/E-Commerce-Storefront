@@ -1,10 +1,10 @@
-import { Card, CardActionArea, CardActions, IconButton, Rating, Tooltip, CardContent, Typography } from '@mui/material';
+import { Card, CardActions, IconButton, Rating, Tooltip, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { toast } from 'react-toastify';
 import useWishlist from '../../../Hooks/useWishlist';
-import styles from './ProductCard.module.css'
+import styles from './ProductCard.module.css';
 
 export default function ProductCard({ prod, showWishlistAction = true }) {
     const navigate = useNavigate();
@@ -19,6 +19,11 @@ export default function ProductCard({ prod, showWishlistAction = true }) {
 
     const productInWishlist = isInWishlist(prod?._id);
     const detailPath = `/Detail/type/${prod?.type}/${prod?._id}`;
+
+    // Deterministic discount: same product always shows same %
+    const discount = (prod.price % 4 + 1) * 10; // 10, 20, 30, or 40
+    const originalPrice = Math.round(prod.price / (1 - discount / 100));
+    const discountedPrice = prod.price;
 
     const handleWishlistClick = async () => {
         if (!isAuthenticated) {
@@ -48,23 +53,58 @@ export default function ProductCard({ prod, showWishlistAction = true }) {
 
     return (
         <Card className={styles.main_card}>
-            <CardActionArea className={styles.card_action} component={Link} to={detailPath}>
+            {/* Image section with overlay & badge */}
+            <Link to={detailPath} className={styles.image_link}>
                 <Box className={styles.cart_box}>
-                    <img alt={prod.name} src={prod.image} loading='lazy' className={styles.cart_img} />
+                    {/* SALE badge */}
+                    <span className={styles.sale_badge}>{discount}% OFF</span>
+
+                    <img
+                        alt={prod.name}
+                        src={prod.image}
+                        loading="lazy"
+                        className={styles.cart_img}
+                    />
+
+                    {/* Hover overlay */}
+                    <div className={styles.img_overlay}>
+                        <span className={styles.overlay_text}>View Details</span>
+                    </div>
                 </Box>
-                <CardContent>
-                    <Typography gutterBottom variant="h6" sx={{ textAlign: "center" }}>
-                        {prod.name.length > 20 ? prod.name.slice(0, 20) + '...' : prod.name}
+            </Link>
+
+            {/* Product name */}
+            <Box className={styles.card_content}>
+                <Typography
+                    variant="h6"
+                    sx={{ textAlign: 'center', fontWeight: 600, fontSize: '0.95rem', lineHeight: 1.3 }}
+                >
+                    {prod.name.length > 22 ? prod.name.slice(0, 22) + '…' : prod.name}
+                </Typography>
+            </Box>
+
+            {/* Price + Rating + Wishlist */}
+            <CardActions className={styles.card_actions}>
+                {/* Price block */}
+                <Box className={styles.price_block}>
+                    <Typography variant="body2" className={styles.original_price}>
+                        ₹{originalPrice}
                     </Typography>
-                </CardContent>
-            </CardActionArea>
-            <CardActions style={{ display: "flex", justifyContent: "space-between", width: '100%' }}>
-                <Typography variant="h6" color="primary">
-                    ₹{prod.price}
-                </Typography>
-                <Typography>
-                    <Rating precision={0.5} name="read-only" value={prod.rating} readOnly />
-                </Typography>
+                    <Typography variant="h6" className={styles.discounted_price}>
+                        ₹{discountedPrice}
+                    </Typography>
+                </Box>
+
+                {/* Rating */}
+                <Rating
+                    precision={0.5}
+                    name="read-only"
+                    value={prod.rating}
+                    readOnly
+                    size="small"
+                />
+
+                {/* Wishlist */}
                 {showWishlistAction && (
                     <Tooltip title={productInWishlist ? 'Remove From Wishlist' : 'Add To Wishlist'}>
                         <span>
@@ -81,6 +121,6 @@ export default function ProductCard({ prod, showWishlistAction = true }) {
                     </Tooltip>
                 )}
             </CardActions>
-        </Card >
+        </Card>
     );
 }

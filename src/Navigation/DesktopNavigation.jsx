@@ -1,6 +1,7 @@
 import './Desktop.css'
 import React, { useContext, useEffect, useState } from 'react'
 import { AiOutlineHeart, AiOutlineShoppingCart, AiFillCloseCircle } from 'react-icons/ai'
+import { MdDarkMode, MdLightMode } from 'react-icons/md'
 import { CgProfile } from 'react-icons/cg'
 import { FiLogOut } from 'react-icons/fi'
 import { Link, NavLink, useNavigate } from 'react-router-dom';
@@ -11,7 +12,13 @@ import { getCart, getWishList, handleLogOut, handleClickOpen, handleClose, Trans
 
 const DesktopNavigation = () => {
 
-  const { cart, setCart, wishlistData, setWishlistData } = useContext(ContextFunction)
+  const { cart, setCart, wishlistData, setWishlistData, darkMode, setDarkMode } = useContext(ContextFunction)
+
+  const handleDarkModeToggle = () => {
+    const next = !darkMode
+    setDarkMode(next)
+    localStorage.setItem('darkMode', next)
+  }
   const [openAlert, setOpenAlert] = useState(false);
   const navigate = useNavigate()
   let authToken = localStorage.getItem('Authorization');
@@ -37,11 +44,16 @@ const DesktopNavigation = () => {
                 <span className='nav-icon-span'>  Home</span>
               </NavLink>
             </li>
-            {/* <li className="nav-links">
-              <NavLink to='/contact'>
-                <span className='nav-icon-span'>  Contact Us</span>
+            <li className="nav-links">
+              <NavLink to='/about'>
+                <span className='nav-icon-span'>  About</span>
               </NavLink>
-            </li> */}
+            </li>
+            <li className="nav-links">
+              <NavLink to='/contact'>
+                <span className='nav-icon-span'>  Contact</span>
+              </NavLink>
+            </li>
 
             <li className="nav-links">
               <Tooltip title='Cart'>
@@ -84,6 +96,23 @@ const DesktopNavigation = () => {
                 </li>
             }
           </ul>
+          <button
+            onClick={handleDarkModeToggle}
+            title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: darkMode ? '#facc15' : '#334155',
+              fontSize: '1.6rem',
+              display: 'flex',
+              alignItems: 'center',
+              marginLeft: '12px',
+              transition: 'color 0.2s'
+            }}
+          >
+            {darkMode ? <MdLightMode /> : <MdDarkMode />}
+          </button>
         </div>
       </nav >
       <Dialog

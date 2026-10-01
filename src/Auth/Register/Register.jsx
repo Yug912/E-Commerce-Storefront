@@ -7,29 +7,7 @@ import { Box, Container } from '@mui/system'
 import { toast } from 'react-toastify'
 import CopyRight from '../../Components/CopyRight/CopyRight'
 import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
-
-// ─── Mock Auth Helpers ────────────────────────────────────────────────────────
-const MOCK_USERS_KEY = 'shopIt_mock_users';
-
-const getMockUsers = () => {
-  try {
-    return JSON.parse(localStorage.getItem(MOCK_USERS_KEY)) || [];
-  } catch {
-    return [];
-  }
-};
-
-const saveMockUser = (user) => {
-  const users = getMockUsers();
-  users.push(user);
-  localStorage.setItem(MOCK_USERS_KEY, JSON.stringify(users));
-};
-
-const generateMockToken = (user) => {
-  const payload = btoa(JSON.stringify({ email: user.email, name: user.firstName + ' ' + user.lastName, exp: Date.now() + 86400000 }));
-  return `mock.${payload}.token`;
-};
-// ─────────────────────────────────────────────────────────────────────────────
+import axios from 'axios';
 
 const Register = () => {
 
@@ -46,7 +24,7 @@ const Register = () => {
 
   useEffect(() => {
     let auth = localStorage.getItem('Authorization');
-    if (auth) {
+    if (auth && !auth.startsWith('mock.')) {
       navigate("/")
     }
   }, [])
@@ -54,7 +32,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     let phoneRegex = /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$/gm;
-    let emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.([^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!credentials.email && !credentials.firstName && !credentials.password && !credentials.phoneNumber && !credentials.lastName) {
       toast.error("All fields are required", { autoClose: 500, theme: 'colored' })
@@ -67,37 +45,15 @@ const Register = () => {
     } else if (credentials.password.length < 5) {
       toast.error("Please enter password with more than 5 characters", { autoClose: 500, theme: 'colored' })
     } else {
-      // ── Mock Register: check if email already exists ──
-      const users = getMockUsers();
-      const emailExists = users.some((u) => u.email === credentials.email);
-
-      if (emailExists) {
-        toast.error("Email already registered. Please login.", { autoClose: 1000, theme: 'colored' })
-        return;
+      try {
+        const { data } = await axios.post(process.env.REACT_APP_REGISTER, credentials);
+        localStorage.setItem('Authorization', data.authToken);
+        localStorage.setItem('shopIt_user', JSON.stringify(credentials));
+        toast.success("Registered Successfully", { autoClose: 500, theme: 'colored' })
+        navigate('/')
+      } catch (error) {
+        toast.error(error.response?.data?.error || "Unable to register. Please try again.", { autoClose: 1500, theme: 'colored' })
       }
-
-      // Save user to localStorage
-      const newUser = {
-        firstName: credentials.firstName,
-        lastName: credentials.lastName,
-        email: credentials.email,
-        phoneNumber: credentials.phoneNumber,
-        password: credentials.password,
-      };
-      saveMockUser(newUser);
-
-      // Auto-login after registration
-      const token = generateMockToken(newUser);
-      localStorage.setItem('Authorization', token);
-      localStorage.setItem('shopIt_user', JSON.stringify({
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        email: newUser.email,
-        phoneNumber: newUser.phoneNumber,
-      }));
-
-      toast.success("Registered Successfully", { autoClose: 500, theme: 'colored' })
-      navigate('/')
     }
   }
 

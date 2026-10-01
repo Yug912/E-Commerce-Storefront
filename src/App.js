@@ -1,4 +1,6 @@
 import './App.css';
+import { useContext, useEffect } from 'react';
+import { ContextFunction } from './Context/Context';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import HomePage from './Pages/Home/HomePage';
 import Login from './Auth/Login/Login';
@@ -7,6 +9,7 @@ import Cart from './Pages/Cart/Cart';
 import ProductDetail from './Pages/Detail/ProductDetail';
 import SingleCategory from './SingleCategory/SingleCategory';
 import MobileNavigation from './Navigation/MobileNavigation';
+import Footer from './Components/Footer/Footer';
 import DesktopNavigation from './Navigation/DesktopNavigation';
 import Wishlist from './Pages/WhisList/Wishlist';
 import PaymentSuccess from './Pages/Payment/PaymentSuccess';
@@ -21,22 +24,29 @@ import AdminRegister from './Admin/Auth/Register/AdminRegister';
 import AdminHomePage from './Admin/Pages/AdminHomePage';
 import SingleUserPage from './Admin/Pages/SingleUserPage';
 import SingleProduct from './Admin/Pages/SingleProduct';
-
-
-
-
+import About from './Pages/About/About';
+import Contact from './Pages/Contact/Contact';
 
 function App() {
+  const { darkMode } = useContext(ContextFunction)
+
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-mode')
+    } else {
+      document.body.classList.remove('dark-mode')
+    }
+  }, [darkMode])
   return (
     <>
       <ToastContainer toastClassName='toastContainerBox' transition={Flip} position='top-center' />
       <Router>
         <DesktopNavigation />
-        <div className='margin'>
+        <div className="margin">
           <Routes>
-            {/*User Routes  */}
+            {/* User Routes */}
             <Route path='/' index element={<HomePage />} />
-            <Route path="/login" element={< Login />} />
+            <Route path="/login" element={<Login />} />
             <Route path='/register' element={<Register />} />
             <Route path='/Detail/type/:cat/:id' element={<ProductDetail />} />
             <Route path='product/type/:cat' element={<SingleCategory />} />
@@ -47,9 +57,11 @@ function App() {
             <Route path='/paymentsuccess' element={<PaymentSuccess />} />
             <Route path='/forgotpassword' element={<ForgotPasswordForm />} />
             <Route path='/user/reset/:id/:token' element={<AddNewPassword />} />
+            <Route path='/about' element={<About />} />
+            <Route path='/contact' element={<Contact />} />
 
             {/* Admin Routes */}
-            <Route path="/admin/login" element={< AdminLogin />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
             <Route path='/admin/register' element={<AdminRegister />} />
             <Route path='/admin/home' element={<AdminHomePage />} />
             <Route path='/admin/home/user/:id' element={<SingleUserPage />} />
@@ -57,9 +69,8 @@ function App() {
           </Routes>
         </div>
         <MobileNavigation />
-      </Router >
-
-
+        <Footer />
+      </Router>
     </>
   );
 }

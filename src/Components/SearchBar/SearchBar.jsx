@@ -44,10 +44,24 @@ const SearchBar = () => {
                 id="search"
                 type="search"
                 label="Search Products"
-
                 value={searchTerm}
                 onChange={handleSearch}
-                sx={{ width: { xs: 350, sm: 500, md: 800 }, }}
+                sx={{
+                    width: { xs: 350, sm: 500, md: 800 },
+                    backgroundColor: 'rgba(255,255,255,0.12)',
+                    borderRadius: 2,
+                    input: { color: '#fff' },
+                    label: { color: 'rgba(255,255,255,0.7)' },
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: 2,
+                        '& fieldset': { borderColor: 'rgba(255,255,255,0.5)' },
+                        '&:hover fieldset': { borderColor: '#fff' },
+                        '&.Mui-focused fieldset': { borderColor: '#fff' },
+                    },
+                    '& .MuiInputLabel-root': { color: 'rgba(255,255,255,0.7)' },
+                    '& .MuiInputLabel-root.Mui-focused': { color: '#fff' },
+                    '& .MuiInputAdornment-root svg': { color: '#fff', fontSize: 22 },
+                }}
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
@@ -56,6 +70,7 @@ const SearchBar = () => {
                     ),
                 }}
             />
+
             {
                 searchTerm.length > 0 &&
                 <Box sx={{ width: { xs: 350, sm: 500, md: 800 }, overflowY: "scroll", height: "200px" }}>

@@ -111,3 +111,86 @@ a {
     transform: translateY(-100%);
   }
 }
+
+/* ─── Dark Mode ─────────────────────────────────────────── */
+body.dark-mode {
+  background: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .margin {
+  background: #0f172a;
+  min-height: 100vh;
+}
+
+body.dark-mode .nav {
+  background: #1e293b !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+body.dark-mode a {
+  color: #cbd5e1;
+}
+
+body.dark-mode .MuiCard-root {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .MuiTypography-root {
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .MuiPaper-root {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .MuiOutlinedInput-root {
+  background: #1e293b;
+  color: #e2e8f0;
+}
+
+body.dark-mode input {
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .MuiInputLabel-root {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .MuiSelect-select {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .MuiMenu-paper {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .MuiMenuItem-root {
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .MuiMenuItem-root:hover {
+  background: #334155 !important;
+}
+
+body.dark-mode .MuiAppBar-root,
+body.dark-mode .MuiToolbar-root {
+  background: #1e293b !important;
+}
+
+body.dark-mode .MuiDivider-root {
+  border-color: #334155 !important;
+}
+
+body.dark-mode .MuiChip-root {
+  background: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .footer-root {
+  background: #020617 !important;
+}

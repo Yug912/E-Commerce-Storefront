@@ -7,26 +7,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { MdLockOutline } from 'react-icons/md'
 import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
+import axios from 'axios';
 
 import CopyRight from '../../Components/CopyRight/CopyRight'
-
-// ─── Mock Auth Helper ────────────────────────────────────────────────────────
-// Generates a simple mock JWT-style token for demo purposes
-const generateMockToken = (user) => {
-  const payload = btoa(JSON.stringify({ email: user.email, name: user.firstName + ' ' + user.lastName, exp: Date.now() + 86400000 }));
-  return `mock.${payload}.token`;
-};
-
-const MOCK_USERS_KEY = 'shopIt_mock_users';
-
-const getMockUsers = () => {
-  try {
-    return JSON.parse(localStorage.getItem(MOCK_USERS_KEY)) || [];
-  } catch {
-    return [];
-  }
-};
-// ─────────────────────────────────────────────────────────────────────────────
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" })
@@ -42,14 +25,14 @@ const Login = () => {
 
   useEffect(() => {
     let auth = localStorage.getItem('Authorization');
-    if (auth) {
+    if (auth && !auth.startsWith('mock.')) {
       navigate("/")
     }
   }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    let emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.([^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!credentials.email && !credentials.password) {
       toast.error("All fields are required", { autoClose: 500, theme: 'colored' })
@@ -58,26 +41,16 @@ const Login = () => {
     } else if (credentials.password.length < 5) {
       toast.error("Please enter valid password", { autoClose: 500, theme: 'colored' })
     } else {
-      // ── Mock Login: check against locally stored users ──
-      const users = getMockUsers();
-      const matchedUser = users.find(
-        (u) => u.email === credentials.email && u.password === credentials.password
-      );
-
-      if (matchedUser) {
-        const token = generateMockToken(matchedUser);
-        localStorage.setItem('Authorization', token);
-        // Store user info for profile pages
+      try {
+        const { data } = await axios.post(process.env.REACT_APP_LOGIN, credentials);
+        localStorage.setItem('Authorization', data.authToken);
         localStorage.setItem('shopIt_user', JSON.stringify({
-          firstName: matchedUser.firstName,
-          lastName: matchedUser.lastName,
-          email: matchedUser.email,
-          phoneNumber: matchedUser.phoneNumber || '',
+          email: credentials.email,
         }));
         toast.success("Login Successfully", { autoClose: 500, theme: 'colored' })
         navigate('/')
-      } else {
-        toast.error("Invalid email or password. Please register first.", { autoClose: 1500, theme: 'colored' })
+      } catch (error) {
+        toast.error(error.response?.data?.error || "Invalid email or password.", { autoClose: 1500, theme: 'colored' })
       }
     }
   }
