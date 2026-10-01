@@ -9,11 +9,11 @@ const Carousel = () => {
         568: { items: 2 },
         1024: { items: 3, itemsFit: 'contain' },
     };
-    const items = BannerData.map((item) => (
+    const items = BannerData.map((item, index) => (
 
         <Link to={`product/type/${item.name.toLowerCase()}`} key={item.name} >
             <div className="item" style={{ marginTop: 10 }} >
-                <img src={item.img} loading='lazy' alt={item.name} style={{ height: '100%', width: '100%', objectFit: 'contain' }} />
+                <img src={item.img} loading={index < 3 ? 'eager' : 'lazy'} alt={item.name} style={{ height: '100%', width: '100%', objectFit: 'contain' }} />
             </div>
         </Link>
     ))
